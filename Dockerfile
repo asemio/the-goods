@@ -22,5 +22,5 @@ RUN sudo apt-get update \
     && sudo apt-get install -y google-cloud-sdk kubectl \
     && sudo apt-get -y autoclean
 
-WORKDIR /
+WORKDIR /home/circleci
 
