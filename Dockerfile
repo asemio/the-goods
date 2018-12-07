@@ -6,8 +6,8 @@ WORKDIR /home/circleci
 RUN curl https://releases.hashicorp.com/terraform/0.11.9/terraform_0.11.9_linux_amd64.zip -o terraform_0.11.9_linux_amd64.zip
 RUN unzip terraform_0.11.9_linux_amd64.zip -d terraform
 # install custom terraform kubernetes provider (so we can manage k8s deployments in tf
-RUN curl -L https://github.com/sl1pm4t/terraform-provider-kubernetes/releases/download/v1.1.0-custom/terraform-provider-kubernetes_v1.1.0-custom_linux_amd64.zip -o terraform-provider-kubernetes_v1.1.0-custom_linux_amd64.zip
-RUN unzip terraform-provider-kubernetes_v1.1.0-custom_linux_amd64.zip -d tf-k8s
+RUN curl -L https://github.com/sl1pm4t/terraform-provider-kubernetes/releases/download/v1.3.0-custom/terraform-provider-kubernetes_v1.3.0-custom_linux_amd64.zip -o terraform-provider-kubernetes_v1.3.0-custom_linux_amd64.zip
+RUN unzip terraform-provider-kubernetes_v1.3.0-custom_linux_amd64.zip -d tf-k8s
 RUN ls tf-k8s
 
 # copy tf from intermediate layer
