@@ -22,7 +22,7 @@ COPY --from=tf /home/circleci/tf-k8s/ /home/circleci/.terraform.d/plugins/
 # ensure plugin exists
 RUN ls ~/.terraform.d/plugins/*
 
-ENV HELM_VERSION="v2.11.0"
+ENV HELM_VERSION="v2.12.3"
 
 RUN export CLOUD_SDK_REPO="cloud-sdk-jessie" \
     && echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
