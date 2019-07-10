@@ -28,7 +28,8 @@ RUN export CLOUD_SDK_REPO="cloud-sdk-jessie" \
     && echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 RUN sudo apt-get update \
-    && sudo apt-get install -y google-cloud-sdk kubectl \
+    && sudo apt-get upgrade -y \
+    && sudo apt-get install -y google-cloud-sdk kubectl gawk \
     && sudo apt-get -y autoclean
 RUN sudo curl -L https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz -o helm.tar.gz
 RUN sudo tar -xzO linux-amd64/helm -f helm.tar.gz > ~/helm \
