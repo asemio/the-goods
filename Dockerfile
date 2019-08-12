@@ -1,4 +1,4 @@
-FROM circleci/node:8 as base
+FROM circleci/node:10 as base
 
 # set up terraform
 FROM base AS tf
