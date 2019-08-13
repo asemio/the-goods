@@ -3,6 +3,6 @@
 3. Run the commands:
 
 ```
-docker build -t asemio/the-goods:0.3.0 -t asemio/the-goods:latest .
-docker push asemio/the-goods:0.3.0
+docker build --squash -t asemio/the-goods:0.3.1 .
+docker push asemio/the-goods:0.3.1
 ```
