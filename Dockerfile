@@ -3,8 +3,8 @@ FROM circleci/node:10 as base
 # set up terraform
 FROM base AS tf
 WORKDIR /home/circleci
-RUN curl https://releases.hashicorp.com/terraform/0.12.6/terraform_0.12.6_linux_amd64.zip -o terraform_0.12.6_linux_amd64.zip \
-  && unzip terraform_0.12.6_linux_amd64.zip -d terraform
+RUN curl https://releases.hashicorp.com/terraform/0.12.9/terraform_0.12.9_linux_amd64.zip -o terraform_0.12.9_linux_amd64.zip \
+  && unzip terraform_0.12.9_linux_amd64.zip -d terraform
 
 # copy tf from intermediate layer
 FROM base AS final
