@@ -13,7 +13,7 @@ COPY --from=tf /home/circleci/terraform .
 # ensure binary exists
 RUN ls /usr/bin/terraform
 
-ENV HELM_VERSION="v2.14.3"
+ENV HELM_VERSION="v2.17.0"
 
 RUN export CLOUD_SDK_REPO="cloud-sdk-jessie" \
   && echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
