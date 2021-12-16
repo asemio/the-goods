@@ -1,24 +1,36 @@
-FROM circleci/node:10 as base
+FROM alpine:3.15
+WORKDIR /root
 
-#####
-FROM base AS tf
-WORKDIR /home/circleci
-RUN export TF_VERSION="0.12.31" \
-  && curl https://releases.hashicorp.com/terraform/${TF_VERSION}/terraform_${TF_VERSION}_linux_amd64.zip -o terraform_${TF_VERSION}_linux_amd64.zip \
-  && unzip terraform_${TF_VERSION}_linux_amd64.zip -d terraform
+ENV TF_VERSION '0.12.31'
+ENV TF_ZIP "terraform_${TF_VERSION}_linux_amd64.zip"
+ENV GCLOUD_TAR 'google-cloud-sdk-367.0.0-linux-x86_64.tar.gz'
 
-#####
-FROM base AS final
-COPY --from=tf /home/circleci/terraform /usr/bin/terraform
-RUN ls /usr/bin/terraform
+# gcloud SDK requires Python v2.7 or v3.7. v2.7 is easier to get from apk
+RUN apk update \
+  # Warning: these are the dependencies needed to complete the execution of this Dockerfile ONLY
+  # Further runtime dependencies go into launch.sh
+  && apk add --no-cache curl bash unzip python2 ca-certificates gnupg \
+    # These ones are an exception because they're small enough and it saves some startup time
+    git gawk jq coreutils openssh-client
 
-RUN sudo apt-get update \
-  && sudo apt-get install apt-transport-https ca-certificates gnupg gawk postgresql-client jq \
-  && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
-  && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add - \
-  && sudo apt-get update \
-  && sudo apt-get upgrade -y \
-  && sudo apt-get install -y google-cloud-sdk \
-  && sudo apt-get -y autoclean
+SHELL ["/bin/bash", "-c"]
 
-WORKDIR /home/circleci
+RUN echo 'export PS1="\w\\$ "' >> "$HOME/.bashrc" \
+  # TERRAFORM \
+  && curl "https://releases.hashicorp.com/terraform/${TF_VERSION}/$TF_ZIP" -o "$TF_ZIP" \
+  && unzip "$TF_ZIP" \
+  && rm -r "$TF_ZIP" \
+  # GCLOUD
+  && curl -O "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/$GCLOUD_TAR" \
+  && tar xzf "$GCLOUD_TAR" \
+  && rm "$GCLOUD_TAR" \
+  && pushd google-cloud-sdk \
+    && ./install.sh --additional-components beta --rc-path /root/.bashrc --usage-reporting false --quiet \
+  && popd \
+  # COMPRESS
+  && tar czf tools.tar.gz terraform google-cloud-sdk \
+  && rm -r terraform google-cloud-sdk
+
+COPY launch.sh .
+
+ENTRYPOINT [ "/root/launch.sh" ]
