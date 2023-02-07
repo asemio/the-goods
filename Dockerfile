@@ -1,15 +1,14 @@
-FROM alpine:3.15
+FROM alpine:3.17
 WORKDIR /root
 
 ENV TF_VERSION '0.12.31'
 ENV TF_ZIP "terraform_${TF_VERSION}_linux_amd64.zip"
-ENV GCLOUD_TAR 'google-cloud-sdk-367.0.0-linux-x86_64.tar.gz'
+ENV GCLOUD_TAR 'google-cloud-sdk-416.0.0-linux-x86_64.tar.gz'
 
-# gcloud SDK requires Python v2.7 or v3.7. v2.7 is easier to get from apk
 RUN apk update \
   # Warning: these are the dependencies needed to complete the execution of this Dockerfile ONLY
   # Further runtime dependencies go into launch.sh
-  && apk add --no-cache curl bash unzip python2 ca-certificates gnupg \
+  && apk add --no-cache curl bash unzip python3 ca-certificates gnupg \
     # These ones are an exception because they're small enough and it saves some startup time
     git gawk jq coreutils openssh-client
 

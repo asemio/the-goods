@@ -8,11 +8,13 @@ pushd /root > /dev/null
   source .bashrc
 popd > /dev/null
 
+apk update && apk upgrade
+
 if [ "$#" -eq 0 ] && [ -z "$CIRCLE_BRANCH" ]; then
   bash
 elif [ "$#" -eq 1 ] && [ "$1" = 'install' ]; then
   # install extra deps
-  apk update && apk add --no-cache postgresql-client npm nodejs docker
+  apk add --no-cache postgresql-client npm nodejs docker
 else
   "$@"
 fi
