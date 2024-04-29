@@ -1,4 +1,4 @@
-FROM alpine:3.17
+FROM alpine:3.19
 WORKDIR /root
 
 ENV TF_VERSION '0.12.31'
